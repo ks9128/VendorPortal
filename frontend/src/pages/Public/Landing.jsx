@@ -1,58 +1,107 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Link } from 'react-router-dom';
+import { Store, TrendingUp, Star, ArrowRight } from 'lucide-react';
 
 const Landing = () => {
   return (
     <div className="flex flex-col min-h-[calc(100vh-3.5rem)]">
-      <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
-        <div className="container mx-auto flex max-w-[64rem] flex-col items-center gap-4 text-center px-8">
-          <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
-            Streamline Your Vendor Management
-          </h1>
-          <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
-            A powerful, modern platform for vendors to manage products, track reviews, and grow their business. 
-            Join thousands of successful vendors today.
-          </p>
-          <div className="space-x-4">
-            <Link to="/auth/register">
-              <Button size="lg" className="px-8">Get Started</Button>
-            </Link>
-            <Link to="/vendors">
-              <Button size="lg" variant="secondary" className="px-8">Browse Vendors</Button>
-            </Link>
-            <Link to="/auth/login">
-              <Button size="lg" variant="outline" className="px-8">Login</Button>
-            </Link>
+      {/* Hero Section */}
+      <section className="py-20 md:py-32">
+        <div className="container mx-auto px-8 max-w-6xl">
+          <div className="text-center space-y-8">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+              Your Business,
+              <span className="block text-primary mt-2">Supercharged</span>
+            </h1>
+            
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Find trusted vendors, contractors, and suppliers. Browse verified businesses ready to serve you.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+              <Link to="/vendors">
+                <Button size="lg" className="px-12 h-16 text-xl shadow-lg hover:shadow-xl w-full sm:w-auto">
+                  Browse All Vendors
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </Link>
+            </div>
+            
+            <div className="flex items-center gap-4 justify-center pt-6 text-sm text-muted-foreground">
+              <span>Are you a vendor?</span>
+              <Link to="/auth/register">
+                <Button variant="link" className="px-0">Register</Button>
+              </Link>
+              <span>·</span>
+              <Link to="/auth/login">
+                <Button variant="link" className="px-0">Sign In</Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="container mx-auto space-y-6 bg-slate-50 py-8 dark:bg-transparent md:py-12 lg:py-24 px-8 rounded-3xl my-8">
-        <div className="mx-auto grid justify-center gap-4 sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-3">
-          <div className="relative overflow-hidden rounded-lg border bg-background p-2">
-            <div className="flex h-[180px] flex-col justify-between rounded-md p-6">
-              <div className="space-y-2">
-                <h3 className="font-bold">Analytics</h3>
-                <p className="text-sm text-muted-foreground">Track your sales and performance with detailed charts.</p>
+      {/* Features Grid */}
+      <section className="py-20 bg-slate-50/50">
+        <div className="container mx-auto px-8 max-w-6xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Everything You Need to Succeed</h2>
+            <p className="text-muted-foreground text-lg">Powerful tools designed for modern vendors</p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white p-8 rounded-2xl border border-slate-200 hover:border-primary/50 hover:shadow-lg transition-all">
+              <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
+                <Store className="w-6 h-6 text-primary" />
               </div>
+              <h3 className="text-xl font-bold mb-3">Product Management</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Easily manage your inventory with our intuitive dashboard and real-time updates.
+              </p>
+            </div>
+            
+            <div className="bg-white p-8 rounded-2xl border border-slate-200 hover:border-primary/50 hover:shadow-lg transition-all">
+              <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
+                <TrendingUp className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-bold mb-3">Sales Analytics</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Track your performance with detailed insights and analytics to grow your business.
+              </p>
+            </div>
+            
+            <div className="bg-white p-8 rounded-2xl border border-slate-200 hover:border-primary/50 hover:shadow-lg transition-all">
+              <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
+                <Star className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-bold mb-3">Customer Reviews</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Build trust and credibility with authentic customer reviews and ratings.
+              </p>
             </div>
           </div>
-          <div className="relative overflow-hidden rounded-lg border bg-background p-2">
-            <div className="flex h-[180px] flex-col justify-between rounded-md p-6">
-              <div className="space-y-2">
-                <h3 className="font-bold">Product Management</h3>
-                <p className="text-sm text-muted-foreground">Easy-to-use tools for inventory and product listing.</p>
-              </div>
-            </div>
-          </div>
-          <div className="relative overflow-hidden rounded-lg border bg-background p-2">
-            <div className="flex h-[180px] flex-col justify-between rounded-md p-6">
-              <div className="space-y-2">
-                <h3 className="font-bold">Customer Reviews</h3>
-                <p className="text-sm text-muted-foreground">Manage feedback and build trust with your customers.</p>
-              </div>
-            </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us */}
+      <section className="py-20 border-t">
+        <div className="container mx-auto px-8 max-w-4xl text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">For Vendors</h2>
+          <p className="text-xl text-muted-foreground mb-8">
+            Join our platform to grow your business and reach more customers
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to="/auth/register">
+              <Button size="lg" className="px-8 h-12 w-full sm:w-auto">
+                Register Your Business
+              </Button>
+            </Link>
+            <Link to="/auth/login">
+              <Button size="lg" variant="outline" className="px-8 h-12 w-full sm:w-auto">
+                Vendor Login
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

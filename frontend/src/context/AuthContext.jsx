@@ -39,8 +39,13 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    await axios.post(`/vendors/logout`);
-    setUser(null);
+    try {
+        await axios.post(`/vendors/logout`);
+    } catch (error) {
+        console.error("Logout failed on backend", error);
+    } finally {
+        setUser(null);
+    }
   };
 
   return (

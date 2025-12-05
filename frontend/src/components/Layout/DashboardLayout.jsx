@@ -15,6 +15,15 @@ const DashboardLayout = () => {
   const { logout, user } = useAuth();
   const location = useLocation();
 
+  const handleLogout = async () => {
+    try {
+        await logout();
+    } catch (e) {
+        console.error("Logout error", e);
+    }
+    window.location.href = '/'; 
+  };
+
   const sidebarItems = [
     { icon: LayoutDashboard, label: 'Overview', path: '/dashboard' },
     { icon: Package, label: 'Products', path: '/dashboard/products' },
@@ -53,7 +62,7 @@ const DashboardLayout = () => {
         </div>
 
         <div className="p-4 border-t">
-          <Button variant="outline" className="w-full gap-2 text-red-500 hover:text-red-600 hover:bg-red-50 border-red-100" onClick={logout}>
+          <Button variant="outline" className="w-full gap-2 text-red-500 hover:text-red-600 hover:bg-red-50 border-red-100" onClick={handleLogout}>
             <LogOut className="h-4 w-4" />
             Sign Out
           </Button>
@@ -68,6 +77,9 @@ const DashboardLayout = () => {
             {location.pathname.split('/').pop() || 'Overview'}
           </h1>
           <div className="flex items-center gap-4">
+             <Link to="/vendors" className="hidden md:block">
+                <Button variant="ghost" size="sm">Browse Vendors</Button>
+            </Link>
             <span className="text-sm text-slate-500">Welcome, {user?.name || 'Vendor'}</span>
             <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
               {user?.name?.[0] || 'V'}
