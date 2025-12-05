@@ -9,9 +9,11 @@ dotenv.config({
     path: './.env'
 });
 
+import { DB_NAME } from "./constants.js";
+
 const connectDB = async () => {
     try {
-        const connectionInstance = await mongoose.connect(`${process.env.MONGODB_URI}`)
+        const connectionInstance = await mongoose.connect(`${process.env.MONGODB_URI}/${DB_NAME}`)
         console.log(`\n MongoDB connected !! DB HOST: ${connectionInstance.connection.host}`);
     } catch (error) {
         console.log("MONGODB connection error ", error);
@@ -79,21 +81,21 @@ const seedData = async () => {
             shortDescription: "Plumbing and electrical work for home.",
             priceRange: "Rs 500 - 2000",
             vendor: vendor1._id,
-            image: "https://via.placeholder.com/300?text=Home+Repair"
+            image: "https://placehold.co/300?text=Home+Repair"
         },
         {
             name: "Full House Paint",
             shortDescription: "Painting service for 2 BHK flat.",
             priceRange: "Rs 15000 - 25000",
             vendor: vendor1._id,
-            image: "https://via.placeholder.com/300?text=Painting"
+            image: "https://placehold.co/300?text=Painting"
         },
         {
             name: "ACC Cement Bag",
             shortDescription: "50kg cement bag for construction.",
             priceRange: "Rs 400",
             vendor: vendor2._id,
-            image: "https://via.placeholder.com/300?text=Cement"
+            image: "https://placehold.co/300?text=Cement"
         }
     ]);
 

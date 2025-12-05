@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { Product } from "../models/product.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const addProduct = asyncHandler(async (req, res) => {
     const { name, shortDescription, priceRange } = req.body
@@ -10,16 +11,26 @@ const addProduct = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Name and Description are required")
     }
 
-    // Note: Image upload logic will be added later with Cloudinary
-    // For now, we assume a placeholder or string URL is passed if any
-    const image = req.body.image || "https://via.placeholder.com/150"
+    let imageLocalPath;
+    if (req.file && req.file.path) {
+        imageLocalPath = req.file.path
+    }
+
+    let image = "https://placehold.co/150"; // Default fallback
+
+    if (imageLocalPath) {
+        const uploadResponse = await uploadOnCloudinary(imageLocalPath)
+        if (uploadResponse && uploadResponse.url) {
+            image = uploadResponse.url
+        }
+    }
 
     const product = await Product.create({
         name,
         shortDescription,
         priceRange,
         image,
-        vendor: req.user._id // From auth middleware
+        vendor: req.user._id
     })
 
     if (!product) {
@@ -54,7 +65,6 @@ const deleteProduct = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Product not found")
     }
 
-    // Security Check: Ensure the logged-in user owns this product
     if (product.vendor.toString() !== req.user._id.toString()) {
         throw new ApiError(403, "You are not authorized to delete this product")
     }
