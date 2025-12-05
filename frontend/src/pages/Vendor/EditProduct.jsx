@@ -32,7 +32,7 @@ const EditProduct = () => {
         // Wait, 'getVendorProducts' gets all. Let's just fetch all and find one. 
         // Or better, assume I added getProductById? No I didn't. 
         // I will use client side filtering from the vendor's product list for now.
-        const response = await axios.get(`http://localhost:8000/api/v1/products/vendor/${user._id}`);
+        const response = await axios.get(`/products/vendor/${user._id}`);
         const product = response.data.data.find(p => p._id === productId);
         
         if (product) {
@@ -64,7 +64,7 @@ const EditProduct = () => {
     setError('');
 
     try {
-        await axios.put(`http://localhost:8000/api/v1/products/${productId}`, formData);
+        await axios.put(`/products/${productId}`, formData);
         navigate('/dashboard/products');
     } catch (err) {
         console.error(err);

@@ -32,7 +32,7 @@ const Profile = () => {
     setSuccess('');
     try {
       // Assuming endpoint is PATCH /vendors/update-account
-      const response = await axios.patch('http://localhost:8000/api/v1/vendors/update-account', formData);
+      const response = await axios.patch('/vendors/update-account', formData);
       // Update local user state
       // setUser(response.data.data); // Need to expose setUser from context if we want to update it
       setSuccess('Profile updated successfully!');

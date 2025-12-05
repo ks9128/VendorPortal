@@ -16,8 +16,8 @@ const VendorProfile = () => {
     const fetchData = async () => {
       try {
         const [vendorRes, productRes] = await Promise.all([
-            axios.get(`http://localhost:8000/api/v1/vendors/profile/${vendorId}`),
-            axios.get(`http://localhost:8000/api/v1/products/vendor/${vendorId}`)
+            axios.get(`/vendors/profile/${vendorId}`),
+            axios.get(`/products/vendor/${vendorId}`)
         ]);
         setVendor(vendorRes.data.data);
         setProducts(productRes.data.data);

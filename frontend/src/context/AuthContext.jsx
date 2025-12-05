@@ -7,11 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Configure axios defaults
-  axios.defaults.withCredentials = true;
-  // Use a proxy or full URL. For dev, specific port logic might be needed.
-  // Assuming backend is on 8000 based on previous context.
-  const API_URL = 'http://localhost:8000/api/v1'; 
+  // axios defaults are set in main.jsx
 
   useEffect(() => {
     checkAuth();
@@ -19,7 +15,8 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuth = async () => {
     try {
-      const response = await axios.get(`${API_URL}/vendors/current-user`);
+      // Use relative path - baseURL handles the domain
+      const response = await axios.get(`/vendors/current-user`);
       setUser(response.data.data);
     } catch (error) {
       console.error("Auth check failed", error);
@@ -30,19 +27,19 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (email, password) => {
-    const response = await axios.post(`${API_URL}/vendors/login`, { email, password });
+    const response = await axios.post(`/vendors/login`, { email, password });
     setUser(response.data.data.user); 
     return response.data;
   };
 
   const register = async (vendorData) => {
-    const response = await axios.post(`${API_URL}/vendors/register`, vendorData);
+    const response = await axios.post(`/vendors/register`, vendorData);
     // Auto login or just successful reg
     return response.data;
   };
 
   const logout = async () => {
-    await axios.post(`${API_URL}/vendors/logout`);
+    await axios.post(`/vendors/logout`);
     setUser(null);
   };
 

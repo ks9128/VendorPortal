@@ -27,7 +27,7 @@ const Products = () => {
 
   const fetchProducts = async () => {
     try {
-        const response = await axios.get(`http://localhost:8000/api/v1/products/vendor/${user._id}`);
+        const response = await axios.get(`/products/vendor/${user._id}`);
         setProducts(response.data.data);
     } catch (error) {
         console.error("Failed to fetch products", error);
@@ -39,7 +39,7 @@ const Products = () => {
   const handleDelete = async (productId) => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
     try {
-        await axios.delete(`http://localhost:8000/api/v1/products/${productId}`);
+        await axios.delete(`/products/${productId}`);
         setProducts(products.filter(p => p._id !== productId));
     } catch (error) {
         console.error("Failed to delete product", error);

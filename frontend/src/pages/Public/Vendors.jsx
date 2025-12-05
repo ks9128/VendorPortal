@@ -15,7 +15,7 @@ const Vendors = () => {
   useEffect(() => {
     const fetchVendors = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/v1/vendors/');
+        const response = await axios.get('/vendors/');
         setVendors(response.data.data);
       } catch (error) {
         console.error("Failed to fetch vendors", error);

@@ -30,7 +30,7 @@ const Feedback = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(`http://localhost:8000/api/v1/reviews/${vendorId}`, formData);
+      await axios.post(`/reviews/${vendorId}`, formData);
       navigate(`/vendors/${vendorId}`); // Request said /vendor/{vendorId}
     } catch (error) {
       console.error("Failed to submit review", error);
