@@ -30,4 +30,8 @@ app.use("/api/v1/vendors", vendorRouter)
 app.use("/api/v1/products", productRouter)
 app.use("/api/v1/reviews", reviewRouter)
 
+app.get("/", (req, res) => {
+    res.send("Vendor Portal Backend is running successfully");
+})
+
 export { app }
