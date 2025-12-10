@@ -16,6 +16,12 @@ const registerVendor = asyncHandler(async (req, res) => {
         throw new ApiError(400, "All fields are required")
     }
 
+    // 2.1 Validate phone number (Flexible for international: 10-15 digits)
+    const phoneRegex = /^\+?\d{10,15}$/;
+    if (!phoneRegex.test(contactNumber.replace(/\D/g, ''))) {
+        throw new ApiError(400, "Invalid contact number. Must be 10-15 digits.")
+    }
+
     // 3. Check if user already exists
     const existedVendor = await Vendor.findOne({ email })
 
@@ -85,7 +91,7 @@ const loginVendor = asyncHandler(async (req, res) => {
     // 6. Send cookies
     const options = {
         httpOnly: true,
-        secure: true
+        secure: process.env.NODE_ENV === "production"
     }
 
     return res
@@ -118,7 +124,7 @@ const logoutVendor = asyncHandler(async (req, res) => {
 
     const options = {
         httpOnly: true,
-        secure: true
+        secure: process.env.NODE_ENV === "production"
     }
 
     return res
@@ -158,7 +164,7 @@ const updateVendorDetails = asyncHandler(async (req, res) => {
 const getVendorProfile = asyncHandler(async (req, res) => {
     const { vendorId } = req.params;
     const vendor = await Vendor.findById(vendorId).select("-password -refreshToken");
-    
+
     if (!vendor) {
         throw new ApiError(404, "Vendor not found");
     }
@@ -176,7 +182,7 @@ const getVendorStats = asyncHandler(async (req, res) => {
     const vendor = await Vendor.findById(vendorId);
     const productCount = await Product.countDocuments({ vendor: vendorId });
     // Sales is mock for now
-    const sales = Math.floor(Math.random() * 100); 
+    const sales = Math.floor(Math.random() * 100);
 
     return res.status(200).json(new ApiResponse(200, {
         averageRating: vendor.averageRating || 0,

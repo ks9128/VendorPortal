@@ -6,6 +6,9 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Loader2 } from 'lucide-react';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+import { toast } from 'react-hot-toast';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -35,18 +38,26 @@ const Register = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handlePhoneChange = (value) => {
+    setFormData({ ...formData, contactNumber: value });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
+
     try {
       await register(formData);
+      toast.success('Registration successful! Please login.');
       navigate('/auth/login');
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      const errorMessage = err.response?.data?.message || 'Registration failed. Please try again.';
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -61,53 +72,53 @@ const Register = () => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="grid gap-6 md:grid-cols-2">
-            
+
             <div className="space-y-2">
               <Label htmlFor="vendorName">Vendor Business Name</Label>
-              <Input 
-                id="vendorName" 
-                name="vendorName" 
-                placeholder="e.g. Royal Catering Services" 
-                required 
-                value={formData.vendorName} 
-                onChange={handleChange} 
+              <Input
+                id="vendorName"
+                name="vendorName"
+                placeholder="e.g. Royal Catering Services"
+                required
+                value={formData.vendorName}
+                onChange={handleChange}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="ownerName">Owner Name</Label>
-              <Input 
-                id="ownerName" 
-                name="ownerName" 
-                placeholder="Your Full Name" 
-                required 
-                value={formData.ownerName} 
-                onChange={handleChange} 
+              <Input
+                id="ownerName"
+                name="ownerName"
+                placeholder="Your Full Name"
+                required
+                value={formData.ownerName}
+                onChange={handleChange}
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="email">Email Address</Label>
-              <Input 
-                id="email" 
-                name="email" 
-                type="email" 
-                placeholder="name@example.com" 
-                required 
-                value={formData.email} 
-                onChange={handleChange} 
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="name@example.com"
+                required
+                value={formData.email}
+                onChange={handleChange}
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="contactNumber">Contact Number</Label>
-              <Input 
-                id="contactNumber" 
-                name="contactNumber" 
-                placeholder="+1 234 567 8900" 
-                required 
-                value={formData.contactNumber} 
-                onChange={handleChange} 
+              <PhoneInput
+                country={'in'}
+                value={formData.contactNumber}
+                onChange={handlePhoneChange}
+                inputStyle={{ width: '100%', height: '36px' }}
+                containerClass="w-full"
+                inputClass="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
               />
             </div>
 
@@ -130,13 +141,13 @@ const Register = () => {
 
             <div className="space-y-2">
               <Label htmlFor="city">City</Label>
-              <Input 
-                id="city" 
-                name="city" 
-                placeholder="e.g. New York" 
-                required 
-                value={formData.city} 
-                onChange={handleChange} 
+              <Input
+                id="city"
+                name="city"
+                placeholder="e.g. New York"
+                required
+                value={formData.city}
+                onChange={handleChange}
               />
             </div>
 
@@ -154,18 +165,18 @@ const Register = () => {
 
             <div className="space-y-2 md:col-span-2">
               <Label htmlFor="password">Password</Label>
-              <Input 
-                id="password" 
-                name="password" 
-                type="password" 
-                required 
-                value={formData.password} 
-                onChange={handleChange} 
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                required
+                value={formData.password}
+                onChange={handleChange}
               />
             </div>
 
             {error && <p className="text-sm text-red-500 font-medium md:col-span-2">{error}</p>}
-            
+
             <Button type="submit" className="w-full md:col-span-2 mt-4" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {loading ? "Registering..." : "Create Account"}
@@ -173,9 +184,9 @@ const Register = () => {
           </form>
         </CardContent>
         <CardFooter className="flex justify-center pb-8">
-            <p className="text-sm text-muted-foreground">
-                Already have an account? <Link to="/auth/login" className="text-primary font-medium hover:underline">Login</Link>
-            </p>
+          <p className="text-sm text-muted-foreground">
+            Already have an account? <Link to="/auth/login" className="text-primary font-medium hover:underline">Login</Link>
+          </p>
         </CardFooter>
       </Card>
     </div>

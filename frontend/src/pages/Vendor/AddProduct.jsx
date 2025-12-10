@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/componen
 import { useNavigate } from 'react-router-dom';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const AddProduct = () => {
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-        setImageFile(e.target.files[0]);
+      setImageFile(e.target.files[0]);
     }
   };
 
@@ -33,26 +34,31 @@ const AddProduct = () => {
     setLoading(true);
     setError('');
 
-    try {
-        const data = new FormData();
-        data.append('name', formData.name);
-        data.append('shortDescription', formData.shortDescription);
-        data.append('priceRange', formData.priceRange);
-        if (imageFile) {
-            data.append('image', imageFile);
-        }
 
-        await axios.post('/products/add', data, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            }
-        });
-        navigate('/dashboard/products');
+
+    try {
+      const data = new FormData();
+      data.append('name', formData.name);
+      data.append('shortDescription', formData.shortDescription);
+      data.append('priceRange', formData.priceRange);
+      if (imageFile) {
+        data.append('image', imageFile);
+      }
+
+      await axios.post('/products/add', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
+      toast.success('Product added successfully!');
+      navigate('/dashboard/products');
     } catch (err) {
-        console.error(err);
-        setError(err.response?.data?.message || 'Failed to add product');
+      console.error(err);
+      const errorMessage = err.response?.data?.message || 'Failed to add product';
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -60,7 +66,7 @@ const AddProduct = () => {
     <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" onClick={() => navigate('/dashboard/products')}>
-            <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-4 w-4" />
         </Button>
         <h2 className="text-3xl font-bold tracking-tight">Add New Product</h2>
       </div>
@@ -83,7 +89,7 @@ const AddProduct = () => {
 
             <div className="space-y-2">
               <Label htmlFor="shortDescription">Description</Label>
-               <textarea
+              <textarea
                 id="shortDescription"
                 name="shortDescription"
                 className="flex min-h-[80px] w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 hover:bg-slate-100 transition-colors"
@@ -92,21 +98,21 @@ const AddProduct = () => {
                 onChange={handleChange}
               />
             </div>
-            
+
             <div className="space-y-2">
-                <Label htmlFor="image">Product Image</Label>
-                <Input id="image" name="image" type="file" onChange={handleFileChange} />
-                <p className="text-xs text-muted-foreground">Upload a clear image of your product.</p>
+              <Label htmlFor="image">Product Image</Label>
+              <Input id="image" name="image" type="file" onChange={handleFileChange} />
+              <p className="text-xs text-muted-foreground">Upload a clear image of your product.</p>
             </div>
 
             {error && <p className="text-sm text-red-500 font-medium">{error}</p>}
 
             <div className="flex justify-end gap-4 pt-4">
-                 <Button type="button" variant="outline" onClick={() => navigate('/dashboard/products')}>Cancel</Button>
-                 <Button type="submit" disabled={loading}>
-                    {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Save Product
-                 </Button>
+              <Button type="button" variant="outline" onClick={() => navigate('/dashboard/products')}>Cancel</Button>
+              <Button type="submit" disabled={loading}>
+                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Save Product
+              </Button>
             </div>
           </form>
         </CardContent>

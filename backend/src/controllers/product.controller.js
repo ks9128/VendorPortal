@@ -19,9 +19,13 @@ const addProduct = asyncHandler(async (req, res) => {
     let image = "https://placehold.co/150"; // Default fallback
 
     if (imageLocalPath) {
-        const uploadResponse = await uploadOnCloudinary(imageLocalPath)
-        if (uploadResponse && uploadResponse.url) {
-            image = uploadResponse.url
+        try {
+            const uploadResponse = await uploadOnCloudinary(imageLocalPath)
+            if (uploadResponse && uploadResponse.url) {
+                image = uploadResponse.url
+            }
+        } catch (error) {
+            throw new ApiError(500, error.message || "Failed to upload product image")
         }
     }
 

@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
+import { toast } from 'react-hot-toast';
 
 const EditProduct = () => {
   const { productId } = useParams();
@@ -34,15 +35,15 @@ const EditProduct = () => {
         // I will use client side filtering from the vendor's product list for now.
         const response = await axios.get(`/products/vendor/${user._id}`);
         const product = response.data.data.find(p => p._id === productId);
-        
+
         if (product) {
-            setFormData({
-                name: product.name,
-                shortDescription: product.shortDescription,
-                priceRange: product.priceRange
-            });
+          setFormData({
+            name: product.name,
+            shortDescription: product.shortDescription,
+            priceRange: product.priceRange
+          });
         } else {
-            setError("Product not found");
+          setError("Product not found");
         }
       } catch (err) {
         console.error(err);
@@ -63,14 +64,19 @@ const EditProduct = () => {
     setSubmitting(true);
     setError('');
 
+
+
     try {
-        await axios.put(`/products/${productId}`, formData);
-        navigate('/dashboard/products');
+      await axios.put(`/products/${productId}`, formData);
+      toast.success('Product updated successfully!');
+      navigate('/dashboard/products');
     } catch (err) {
-        console.error(err);
-        setError(err.response?.data?.message || 'Failed to update product');
+      console.error(err);
+      const errorMessage = err.response?.data?.message || 'Failed to update product';
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
-        setSubmitting(false);
+      setSubmitting(false);
     }
   };
 
@@ -80,7 +86,7 @@ const EditProduct = () => {
     <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" onClick={() => navigate('/dashboard/products')}>
-            <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-4 w-4" />
         </Button>
         <h2 className="text-3xl font-bold tracking-tight">Edit Product</h2>
       </div>
@@ -103,7 +109,7 @@ const EditProduct = () => {
 
             <div className="space-y-2">
               <Label htmlFor="shortDescription">Description</Label>
-               <textarea
+              <textarea
                 id="shortDescription"
                 name="shortDescription"
                 className="flex min-h-[80px] w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 hover:bg-slate-100 transition-colors"
@@ -112,15 +118,15 @@ const EditProduct = () => {
                 required
               />
             </div>
-            
+
             {error && <p className="text-sm text-red-500 font-medium">{error}</p>}
 
             <div className="flex justify-end gap-4 pt-4">
-                 <Button type="button" variant="outline" onClick={() => navigate('/dashboard/products')}>Cancel</Button>
-                 <Button type="submit" disabled={submitting}>
-                    {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Save Changes
-                 </Button>
+              <Button type="button" variant="outline" onClick={() => navigate('/dashboard/products')}>Cancel</Button>
+              <Button type="submit" disabled={submitting}>
+                {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Save Changes
+              </Button>
             </div>
           </form>
         </CardContent>

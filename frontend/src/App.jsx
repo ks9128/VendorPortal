@@ -17,9 +17,12 @@ import VendorProfile from './pages/Public/VendorProfile';
 import Feedback from './pages/Public/Feedback';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 
+import { Toaster } from 'react-hot-toast';
+
 function App() {
   return (
     <AuthProvider>
+      <Toaster position="top-center" />
       <Router>
         <Routes>
           <Route path="/" element={<MainLayout />}>
@@ -31,7 +34,7 @@ function App() {
             <Route path="vendors/:vendorId/feedback" element={<Feedback />} />
             <Route path="admin" element={<AdminDashboard />} />
           </Route>
-          
+
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="products" element={<Products />} />

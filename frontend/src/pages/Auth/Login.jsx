@@ -7,6 +7,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Loader2 } from 'lucide-react';
 
+import { toast } from 'react-hot-toast';
+
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
@@ -17,19 +19,21 @@ const Login = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
     try {
       await login(formData.email, formData.password);
+      toast.success('Successfully logged in!');
       navigate('/dashboard');
     } catch (err) {
-        console.error(err);
-      setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
+      console.error(err);
+      const errorMessage = err.response?.data?.message || 'Login failed. Please check your credentials.';
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -46,12 +50,12 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email Address</Label>
-              <Input 
-                id="email" 
-                name="email" 
-                type="email" 
-                placeholder="name@example.com" 
-                required 
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="name@example.com"
+                required
                 value={formData.email}
                 onChange={handleChange}
               />
@@ -60,29 +64,29 @@ const Login = () => {
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
                 <Link to="#" className="text-xs text-muted-foreground hover:underline">
-                    Forgot password?
+                  Forgot password?
                 </Link>
               </div>
-              <Input 
-                id="password" 
-                name="password" 
-                type="password" 
-                required 
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                required
                 value={formData.password}
                 onChange={handleChange}
               />
             </div>
             {error && <p className="text-sm text-red-500 font-medium">{error}</p>}
             <Button type="submit" className="w-full" disabled={loading}>
-                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {loading ? "Signing In..." : "Sign In"}
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {loading ? "Signing In..." : "Sign In"}
             </Button>
           </form>
         </CardContent>
         <CardFooter className="flex justify-center flex-col space-y-2">
-            <p className="text-sm text-muted-foreground">
-                Don't have an account? <Link to="/auth/register" className="text-primary font-medium hover:underline">Create an account</Link>
-            </p>
+          <p className="text-sm text-muted-foreground">
+            Don't have an account? <Link to="/auth/register" className="text-primary font-medium hover:underline">Create an account</Link>
+          </p>
         </CardFooter>
       </Card>
     </div>
