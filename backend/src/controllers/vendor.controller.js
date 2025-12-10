@@ -91,7 +91,8 @@ const loginVendor = asyncHandler(async (req, res) => {
     // 6. Send cookies
     const options = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production"
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax"
     }
 
     return res
@@ -124,7 +125,8 @@ const logoutVendor = asyncHandler(async (req, res) => {
 
     const options = {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production"
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax"
     }
 
     return res
